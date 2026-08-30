@@ -5,7 +5,24 @@ window.$RefreshReg$ = () => {};
 window.$RefreshSig$ = () => (type) => type;</script>
 
     <script type="module" src="/@vite/client"></script>
-
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const text = button.textContent.trim();
+            if (text) {
+                // Find any heading or text matching the category name lower down
+                const targets = Array.from(document.querySelectorAll('h1, h2, h3, h4, p, span'));
+                const match = targets.find(el => el.textContent.includes(text) && el !== button);
+                if (match) {
+                    e.preventDefault();
+                    match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    });
+});
+</script>
     <meta charset="UTF-8">
     <script>
       (function () {
