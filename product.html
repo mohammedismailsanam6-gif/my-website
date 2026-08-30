@@ -5,43 +5,7 @@ window.$RefreshReg$ = () => {};
 window.$RefreshSig$ = () => (type) => type;</script>
 
     <script type="module" src="/@vite/client"></script>
-<script>
-window.addEventListener('load', () => {
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Clean the text from the clicked button
-            const cleanText = btn.textContent.replace(/\s*\d+\s*$/, '').trim().toLowerCase();
-            if (!cleanText || cleanText.includes('all')) {
-                location.reload(); // Instantly resets and shows everything cleanly
-                return;
-            }
 
-            // Find all potential product blocks on the page
-            const items = Array.from(document.querySelectorAll('div')).filter(el => {
-                return el.textContent.toLowerCase().includes('view details') && el.children.length > 0;
-            });
-
-            let foundMatch = false;
-            items.forEach(item => {
-                if (item.textContent.toLowerCase().includes(cleanText)) {
-                    item.style.setProperty('display', 'block', 'important');
-                    foundMatch = true;
-                } else {
-                    item.style.setProperty('display', 'none', 'important');
-                }
-            });
-
-            // Fallback: If layout mapping fails, force-reveal everything so page is never empty
-            if (!foundMatch) {
-                document.querySelectorAll('div').forEach(d => d.style.display = '');
-            }
-        });
-    });
-});
-</script>
     <meta charset="UTF-8">
     <script>
       (function () {
