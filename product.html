@@ -8,40 +8,36 @@ window.$RefreshSig$ = () => (type) => type;</script>
 <script>
 window.addEventListener('load', () => {
     const buttons = document.querySelectorAll('button');
-    const products = Array.from(document.querySelectorAll('div, section, article')).filter(el => {
-        const text = el.textContent.toLowerCase();
-        return text.includes('view details') && !el.querySelector('ul') && el.offsetHeight > 0;
-    });
-
     buttons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             
-            const rawText = btn.textContent.trim().toLowerCase().replace(/[\n\r]/g, '').replace(/\s+/g, ' ').replace(/\d+$/, '').trim();
-            let categoryText = rawText;
-            
-            if (rawText.includes('desktops')) categoryText = 'desktops & workstations';
-            if (rawText.includes('laptops')) categoryText = 'laptops & notebooks';
-            if (rawText.includes('monitors')) categoryText = 'monitors & displays';
-            if (rawText.includes('servers')) categoryText = 'servers & racks';
-            if (rawText.includes('cctv')) categoryText = 'cctv & surveillance';
-            if (rawText.includes('smartphones')) categoryText = 'smartphones & mobile';
-            if (rawText.includes('accessories')) categoryText = 'accessories & peripherals';
-            if (rawText.includes('cables')) categoryText = 'cables & connectivity';
-
-            if (!categoryText || categoryText === 'all products' || categoryText === 'all brands') {
-                products.forEach(p => p.style.display = '');
+            // Clean the text from the clicked button
+            const cleanText = btn.textContent.replace(/\s*\d+\s*$/, '').trim().toLowerCase();
+            if (!cleanText || cleanText.includes('all')) {
+                location.reload(); // Instantly resets and shows everything cleanly
                 return;
             }
-            
-            products.forEach(product => {
-                const productContent = product.textContent.toLowerCase();
-                if (productContent.includes(categoryText)) {
-                    product.style.display = ''; 
+
+            // Find all potential product blocks on the page
+            const items = Array.from(document.querySelectorAll('div')).filter(el => {
+                return el.textContent.toLowerCase().includes('view details') && el.children.length > 0;
+            });
+
+            let foundMatch = false;
+            items.forEach(item => {
+                if (item.textContent.toLowerCase().includes(cleanText)) {
+                    item.style.setProperty('display', 'block', 'important');
+                    foundMatch = true;
                 } else {
-                    product.style.display = 'none'; 
+                    item.style.setProperty('display', 'none', 'important');
                 }
             });
+
+            // Fallback: If layout mapping fails, force-reveal everything so page is never empty
+            if (!foundMatch) {
+                document.querySelectorAll('div').forEach(d => d.style.display = '');
+            }
         });
     });
 });
