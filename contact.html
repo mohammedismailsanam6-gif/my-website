@@ -4,7 +4,20 @@ injectIntoGlobalHook(window);
 window.$RefreshReg$ = () => {};
 window.$RefreshSig$ = () => (type) => type;</script>
 
-
+    <script>
+window.onload = function() {
+    const form = document.querySelector('form');
+    if(form) {
+        form.action = "https://web3forms.com";
+        form.method = "POST";
+        const keyInput = document.createElement('input');
+        keyInput.type = 'hidden';
+        keyInput.name = 'access_key';
+        keyInput.value = 'e81f2127-c74c-4be6-b213-dae9b3528b25';
+        form.appendChild(keyInput);
+    }
+}
+</script>
 
     <meta charset="UTF-8">
     <script>
