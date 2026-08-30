@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             
-            const rawText = btn.textContent.replace(/\s*\d+\s*$/, '').trim().toLowerCase();
+            const rawText = btn.textContent.trim().toLowerCase().replace(/[\n\r]/g, '').replace(/\s+/g, ' ').replace(/\d+$/, '').trim();
             let categoryText = rawText;
             
             if (rawText.includes('desktops')) categoryText = 'desktops & workstations';
@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
                 return;
             }
             
-            products.forEach(product => {
+  products.forEach(product => {
                 const productContent = product.textContent.toLowerCase();
                 if (productContent.includes(categoryText)) {
                     product.style.display = ''; 
@@ -44,9 +44,7 @@ window.addEventListener('load', () => {
                     product.style.display = 'none'; 
                 }
             });
-        });
-    });
-});
+            });
 </script>
     <meta charset="UTF-8">
     <script>
