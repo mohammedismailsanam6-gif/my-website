@@ -6,37 +6,35 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
     <script type="module" src="/@vite/client"></script>
 <script>
-window.addEventListener('DOMContentLoaded', () => {
-    // 1. Locate all the category button links in the sidebar menu
-    const categoryButtons = document.querySelectorAll('button, a[href="#"], ul li');
+window.addEventListener('load', () => {
+    // 1. Target all structural buttons inside your sidebar menu list matrix
+    const buttons = document.querySelectorAll('button');
     
-    // 2. Locate all the product display cards inside your product grid
-    // We look for common grid wrapper tags used by web compilers
-    const products = Array.from(document.querySelectorAll('div')).filter(el => {
-        return el.querySelector('h3') && el.querySelector('view-details, a, button');
+    // 2. Select every single layout block that wraps individual product text fields
+    const productCards = Array.from(document.querySelectorAll('div, section')).filter(el => {
+        const text = el.textContent.toLowerCase();
+        return el.querySelector('h3') && (text.includes('view details') || text.includes('logi-') || text.includes('apl-') || text.includes('dell-'));
     });
 
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
             
-            // Extract clean category text name, ignoring the item count numbers
-            const fullText = button.textContent.trim();
-            const categoryText = fullText.replace(/\s*\d+\s*$/, '').trim().toLowerCase();
+            // Clean the category button text, removing item numbers like "Networking 3"
+            const categoryText = btn.textContent.replace(/\s*\d+\s*$/, '').trim().toLowerCase();
             
             if (!categoryText || categoryText === 'all products') {
-                // Show everything if they click "All Products"
-                products.forEach(p => p.style.display = 'block');
+                productCards.forEach(card => card.style.display = 'block');
                 return;
             }
             
-            // Filter your product list matrix based on matching text criteria
-            products.forEach(product => {
-                const productContent = product.textContent.toLowerCase();
-                if (productContent.includes(categoryText)) {
-                    product.style.display = 'block'; // Show item match
+            // Toggle visibility across your entire inventory matrix instantly
+            productCards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                if (cardText.includes(categoryText)) {
+                    card.style.display = 'block';
                 } else {
-                    product.style.display = 'none';  // Hide item mismatch
+                    card.style.display = 'none';
                 }
             });
         });
