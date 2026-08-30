@@ -5,7 +5,55 @@ window.$RefreshReg$ = () => {};
 window.$RefreshSig$ = () => (type) => type;</script>
 
     <script type="module" src="/@vite/client"></script>
+<script>
+window.addEventListener('load', () => {
+    // 1. Target all sidebar menu items and layout buttons
+    const buttons = document.querySelectorAll('button, [role="button"], li');
+    
+    // 2. Locate all main product list blocks on the page that wrap individual items
+    const products = Array.from(document.querySelectorAll('div, section, article')).filter(el => {
+        return el.textContent.toLowerCase().includes('view details') && !el.querySelector('ul') && el.offsetHeight > 0;
+    });
 
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // Stop empty anchor hashes or dynamic wrappers from bouncing the viewport page around
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Clean up the text of the button you clicked (e.g., "Networking 3" becomes "networking")
+            const rawText = btn.textContent.trim().toLowerCase().replace(/[\n\r]/g, '').replace(/\s+/g, ' ').replace(/\d+$/, '').trim();
+            
+            // Set up fallback name alignments for your specific product categories
+            let categoryText = rawText;
+            if (rawText.includes('desktop')) categoryText = 'desktops & workstations';
+            if (rawText.includes('laptop')) categoryText = 'laptops & notebooks';
+            if (rawText.includes('monitor')) categoryText = 'monitors & displays';
+            if (rawText.includes('server')) categoryText = 'servers & racks';
+            if (rawText.includes('cctv')) categoryText = 'cctv & surveillance';
+            if (rawText.includes('smartphones')) categoryText = 'smartphones & mobile';
+            if (rawText.includes('accessories')) categoryText = 'accessories & peripherals';
+            if (rawText.includes('cables')) categoryText = 'cables & connectivity';
+
+            // Reset matrix view if they click "All Products" or "All Brands"
+            if (!categoryText || categoryText.includes('all products') || categoryText.includes('all brands')) {
+                products.forEach(p => p.style.setProperty('display', '', 'important'));
+                return;
+            }
+            
+            // Core Filter Matrix Loop: Scan item strings to show matches and hide mismatches
+            products.forEach(product => {
+                const productContent = product.textContent.toLowerCase();
+                if (productContent.includes(categoryText) || productContent.includes(rawText)) {
+                    product.style.setProperty('display', '', 'important'); // Show matching card
+                } else {
+                    product.style.setProperty('display', 'none', 'important'); // Hide mismatching card
+                }
+            });
+        });
+    });
+});
+</script>
     <meta charset="UTF-8">
     <script>
       (function () {
